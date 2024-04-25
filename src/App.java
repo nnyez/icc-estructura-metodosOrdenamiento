@@ -2,46 +2,86 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        OrderMethods order = new OrderMethods();
-        Scanner sc = new Scanner(System.in);
-        int[] numbers = { 10, 5, 16, 3 };
-        int option = 1;
-        // order.printArray(numbers);
+        SortMethods sorts = new SortMethods();
+        Scanner sc = new Scanner(System.in);//scanner
+        ViewMenus view = new ViewMenus(sc);//clase show menus 
 
-        // int [] bubble = order.sortBubble(numbers,true);
+        int[] numbers = { 3, 54, 31, 245, 100, 2, 21, 200 };
+        int option;
 
-        // System.out.println("Order for Bubble method");
-        // order.printArray(bubble);
-
-        while (option != 0) {
-            System.out.println("\nMenu Principal");
-            System.out.println("Ingrese 0 para terminar\n");
-            System.out.println("1.- Metodo de ordenamiento por burbuja");
-            System.out.println("4.- Imprimir el vector");
-
-            System.out.println("\n Ingrese una Opcion");
-            option = sc.nextInt();
+        do {
+            option = view.showMainMenu();
             switch (option) {
-                case 1:
-                    System.out.println("Ingresando al metodo de ordenamiento \n Burbuja");
-                    System.out.println("Desea mostrar los pasos?(Si:true No:false)");
-                    
-                    boolean show = sc.nextBoolean();
-                    order.printArray(numbers);
-
-                    int[] sortArray =order.sortBubble(numbers, show);
-                    order.printArray(sortArray);
-
+                case 0:
+                    System.out.println("Saliendo...");
                     break;
-                case 4:
-                    order.printArray(numbers);
+                case 1:
+                    numbers = view.insertArray();//creamos un arreglo con los valores ingresados por el usuario
+                    break;
+                case 2:
+                    showSubMenuSort(view, sorts, numbers);//vamos al menu de metodos de ordenamiento
                     break;
 
                 default:
                     break;
             }
 
-        }
+        } while (option != 0);
 
+        sc.close();
+    }
+
+    public static void showSubMenuSort(ViewMenus view, SortMethods sorts, int[] array) {
+        int op = view.showSubMenuSort();// menu opciones de ordenamiento
+        boolean showLog = view.showSubMenuLog();// menu opciones mostrar o no los pasos
+        boolean sortAsc = view.showSubMenuAscDes();// menu para ordenamiento ascendente o descendente
+        int[] orderArray;// array ordenado
+        switch (op) {
+            case 1:
+                System.out.println("BURBUJA:");
+                System.out.print("\nStartArray: ");
+                sorts.printArray(array);// antes de ordenar
+
+                orderArray = sorts.sortBubble(array, showLog, sortAsc);
+
+                System.out.print("SortArray: ");
+                sorts.printArray(orderArray);// despues de ordenar
+                break;
+            case 2:
+                System.out.println("SELECCION:");
+
+                System.out.print("\nStartArray: ");
+                sorts.printArray(array);// antes de ordenar
+
+                orderArray = sorts.sortSelection(array, showLog, sortAsc);
+
+                System.out.print("-SortArray: ");
+                sorts.printArray(orderArray);// despues de ordenar
+                break;
+            case 3:
+                System.out.println("INSERCION:");
+
+                System.out.print("\nStartArray: ");
+                sorts.printArray(array);// antes de ordenar
+
+                orderArray = sorts.sortInsertion(array, showLog, sortAsc);
+
+                System.out.print("-SortArray: ");
+                sorts.printArray(orderArray);// despues de ordenar
+                break;
+            case 4:
+                System.out.println("BURBUJA MEJORADO:");
+
+                System.out.print("\nStartArray: ");
+                sorts.printArray(array);// antes de ordenar
+
+                orderArray = sorts.sortBubblePro(array, showLog, sortAsc);
+
+                System.out.print("-SortArray: ");
+                sorts.printArray(orderArray);// despues de ordenar
+                break;
+            default:
+                break;
+        }
     }
 }
